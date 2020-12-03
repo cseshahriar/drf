@@ -8,6 +8,11 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 
+from rest_framework.authentication import (
+    SessionAuthentication,
+    BasicAuthentication
+)
+from rest_framework.permissions import IsAuthenticated
 ''' Generic Views '''
 
 
@@ -23,6 +28,11 @@ class PollListView(
     serializer_class = QuestionSerializers
     queryset = Question.objects.all()
     # lookup_field = 'something'
+    authentication_classes = [
+        SessionAuthentication,
+        BasicAuthentication
+    ]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk=None, *args, **kwargs):
         ''' list '''
@@ -39,13 +49,13 @@ class PollListView(
         ''' post creating by current logged in user '''
         serializer.save(created_by=self.request.user)  # current user ref
 
-    def perform_update(self, serializer):
-        ''' post creating by current logged in user '''
-        serializer.save(created_by=self.request.user)  # current user ref
-
     def put(self, request, pk=None, *args, **kwargs):
         ''' update '''
         return self.update(request, pk=pk)
+
+    def perform_update(self, serializer):
+        ''' post creating by current logged in user '''
+        serializer.save(created_by=self.request.user)  # current user ref
 
     def delete(self, request, pk=None, *args, **kwargs):
         ''' delete '''
