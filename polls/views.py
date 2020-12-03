@@ -1,13 +1,50 @@
 from .models import Question
 from .serializers import QuestionSerializers
-from rest_framework.parsers import JSONParser
-
-from django.http import Http404, JsonResponse, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from rest_framework import status
+from rest_framework import mixins
+from rest_framework import generics
+
+''' Generic Views '''
+
+
+class PollListView(
+    generics.GenericAPIView,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin
+):
+    ''' list api view '''
+    serializer_class = QuestionSerializers
+    queryset = Question.objects.all()
+    # lookup_field = 'something'
+
+    def get(self, request, pk=None, *args, **kwargs):
+        ''' list '''
+        if pk:
+            return self.retrieve(request, pk)
+        else:
+            return self.list(request)
+
+    def post(self, request, *args, **kwargs):
+        ''' create '''
+        return self.create(request)
+
+    def put(self, request, *args, **kwargs):
+        ''' update '''
+        return self.update(request, pk=self.kwargs['pk'])
+
+    def delete(self, request, *args, **kwargs):
+        ''' delete '''
+        return self.destroy(request, self.kwargs['pk'])
+
+
+''' All APIViews '''
 
 
 class PollAPIView(APIView):
