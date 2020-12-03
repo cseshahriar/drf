@@ -35,13 +35,21 @@ class PollListView(
         ''' create '''
         return self.create(request)
 
-    def put(self, request, *args, **kwargs):
-        ''' update '''
-        return self.update(request, pk=self.kwargs['pk'])
+    def perform_create(self, serializer):
+        ''' post creating by current logged in user '''
+        serializer.save(created_by=self.request.user)  # current user ref
 
-    def delete(self, request, *args, **kwargs):
+    def perform_update(self, serializer):
+        ''' post creating by current logged in user '''
+        serializer.save(created_by=self.request.user)  # current user ref
+
+    def put(self, request, pk=None, *args, **kwargs):
+        ''' update '''
+        return self.update(request, pk=pk)
+
+    def delete(self, request, pk=None, *args, **kwargs):
         ''' delete '''
-        return self.destroy(request, self.kwargs['pk'])
+        return self.destroy(request, pk)
 
 
 ''' All APIViews '''
