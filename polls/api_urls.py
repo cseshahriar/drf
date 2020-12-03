@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import poll, poll_details
+from .views import PollAPIView, PollDetailAPIView
 
 urlpatterns = [
-    path('', poll),
-    path('<int:pk>/', poll_details),
+    path('', PollAPIView.as_view()),
+    path('<int:pk>/', PollDetailAPIView.as_view()),
 ]
