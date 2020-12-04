@@ -4,6 +4,7 @@ from .models import Question, Choice
 
 class ChoicesSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
+    # must for updating, otherwis not update, instade of new created
 
     class Meta:
         model = Choice

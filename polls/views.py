@@ -23,6 +23,14 @@ class PollViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializers
     queryset = Question.objects.all()
 
+    """ if need different serializers
+    def get_serializer_class(self):
+        if self.action == "list":
+            return QuestionListSerializers
+        else:
+            return QuestionSerializers
+    """
+
     @action(detail=True, methods=['GET'])
     def choices(self, request, pk=None):
         question = self.get_object()
