@@ -12,6 +12,11 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def choices(self):
+        """ return all choices belongs to this question """
+        return self.choice_set.all()
+
     def __str__(self):
         return self.title
 

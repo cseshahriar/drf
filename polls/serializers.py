@@ -12,12 +12,17 @@ class ChoicesSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['question']
         # depth = 1  # it return question detail objects
-        depth = 2  # it's return choices with question and question user
+        # depth = 2  # it's return choices with question and question user
         # 1 means one level data return(single object)
 
 
 class QuestionSerializers(serializers.ModelSerializer):
-    ''' model serializers '''
+    """ model serializers """
+
+    # return all choices for this question
+    # nested serializers
+    # must be define top or before
+    choices = ChoicesSerializer(many=True)
 
     class Meta:
         model = Question
@@ -25,7 +30,8 @@ class QuestionSerializers(serializers.ModelSerializer):
             'id',
             'title',
             'status',
-            'created_by'
+            'created_by',
+            'choices'
         ]
 
 
