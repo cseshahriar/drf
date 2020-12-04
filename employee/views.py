@@ -1,22 +1,26 @@
-from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from rest_framework import status
-
-from django.contrib.auth.models import User
-from django.contrib.auth import (
-    login as django_login,
-    logout as django_logout
-)
 from .serializers import (
     EmployeeSerializer,
     LoginSerializer,
     ProfileSerializer
+)
+from django.contrib.auth import (
+    login as django_login,
+    logout as django_logout
+)
+from django.contrib.auth.models import User
+from rest_framework import status
+from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.parsers import (
+    MultiPartParser,
+    FormParser,
+    JSONParser,
+    FileUploadParser
 )
 
 
@@ -26,7 +30,12 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     ordering_fields = ('is_active', 'username')
     ordering = ('username')
     search_fields = ('username', 'first_name')
-    parser_classes = (JSONParser, FormParser, MultiPartParser)
+    parser_classes = (
+        JSONParser,
+        FormParser,
+        MultiPartParser,
+        FileUploadParser
+    )
 
     @action(detail=True, methods=['PUT'])
     def profile(self, request, pk=None):
