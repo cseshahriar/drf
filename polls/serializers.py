@@ -3,6 +3,8 @@ from .models import Question, Choice
 
 
 class ChoicesSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
     class Meta:
         model = Choice
         fields = [
@@ -22,6 +24,7 @@ class QuestionSerializers(serializers.ModelSerializer):
     # return all choices for this question
     # nested serializers
     # must be define top or before
+    # if not required make required=false
     choices = ChoicesSerializer(many=True)
 
     class Meta:
@@ -33,6 +36,19 @@ class QuestionSerializers(serializers.ModelSerializer):
             'created_by',
             'choices'
         ]
+
+    def create(self, validated_data):
+        """ question create with choice """
+        """ remove choice data from question object,
+            because choices are not direct field
+        """
+        choices = validated_data.pop('choices')
+        # only question object
+        question = Question.objects.create(**validated_data)
+        # save choices
+        for choice in choices:
+            Choice.objects.create(**choice, question=question)  # ** is dict
+        return question
 
 
 # question has many choices
