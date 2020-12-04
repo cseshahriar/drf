@@ -20,6 +20,9 @@ from employee.views import LoginAPIView, LogoutAPIView
 from django.conf import settings
 from django.conf.urls.static import static
 
+# api doc
+from .aysg import urlpatterns as api_doc_urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # employee urls
@@ -30,4 +33,7 @@ urlpatterns = [
     path('api/app/login/', LoginAPIView.as_view()),
     path('api/app/logout', LogoutAPIView.as_view()),
     path('api/auth/', include('rest_framework.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += api_doc_urls
