@@ -50,8 +50,32 @@ class QuestionSerializers(serializers.ModelSerializer):
             Choice.objects.create(**choice, question=question)  # ** is dict
         return question
 
+    def update(self, instance, validated_data):
+        """ multi model object update """
+        choices = validated_data.pop('choices')
+        # main model
+        instance.title = validated_data.get("title", instance.title)
+        instance.save()
+        # child model objects
+        keep_choices = []
+        choices_ids = [c.id for c in instance.choices]
+        for choice in choices:
+            # if objects exitsts
+            if "id" in choice.keys():
+                if Choice.objects.filter(id=choice["id"]).exists():
+                    # get obj
+                    c = Choice.objects.get(id=choice["id"])
+                    c.title = choice.get('title', c.title)
+                    c.save()
+                    keep_choices.append(c.id)
+                else:  # if not exist obj
+                    continue
+            else:  # if not exists, create new object
+                c = Choice.objects.create(**choice, question=instance)  #
+                keep_choices.append(c.id)
+        # delete
+        for choice in instance.choices:
+            if choice.id not in keep_choices:
+                choice.delete()
 
-# question has many choices
-# creation data multi model with single serializer
-
-# get/create Question with choices
+        return instance
