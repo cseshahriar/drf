@@ -35,5 +35,5 @@ class LoginSerializer(serializers.Serializer):
                     msg = "User is deactivate"
             else:
                 msg = "Unable to login with given credentials"
-                raise exception.ValidationError(msg)
+                raise exceptions.ValidationError(msg)
         return data
