@@ -1,5 +1,5 @@
-from .models import Question
-from .serializers import QuestionSerializers
+from .models import Question, Choice
+from .serializers import QuestionSerializers, ChoicesSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,12 +15,31 @@ from rest_framework.authentication import (
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
+from rest_framework.decorators import action
 """ Viewset Views """
 
 
 class PollViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializers
     queryset = Question.objects.all()
+
+    @action(detail=True, methods=['GET'])
+    def choices(self, request, pk=None):
+        question = self.get_object()
+        choices = Choice.objects.filter(question=question)
+        serializer = ChoicesSerializer(choices, many=True)
+        return Response(serializer.data, status=200)
+
+    @action(detail=True, methods=['POST'])
+    def choice(self, request, pk=None):
+        question = self.get_object()
+        data = request.data
+        data["question"] = question.pk
+        serializer = ChoicesSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=400)
 
 
 """ Generic Views """
