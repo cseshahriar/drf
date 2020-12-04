@@ -3,18 +3,37 @@ from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
-
+from .models import Profile
 from django.contrib.auth import authenticate
 
 
-class EmployeeSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            'salary',
+            'designation',
+            'picture'
+        ]
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(read_only=True)
+
     class Meta:
         model = User
         fields = [
+            'id',
             'first_name',
             'last_name',
+            'username',
+            'profile',
             'email',
-            'url'  # detail for user
+            'is_staff',
+            'is_active',
+            'date_joined',
+            'is_superuser',
+            'email'
         ]
 
 

@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 from employee.views import LoginAPIView, LogoutAPIView
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # employee urls
@@ -27,4 +30,4 @@ urlpatterns = [
     path('api/app/login/', LoginAPIView.as_view()),
     path('api/app/logout', LogoutAPIView.as_view()),
     path('api/auth/', include('rest_framework.urls')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
