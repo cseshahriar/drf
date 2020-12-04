@@ -9,6 +9,7 @@ from rest_framework import mixins
 from rest_framework import generics
 
 from rest_framework.authentication import (
+    TokenAuthentication,
     SessionAuthentication,
     BasicAuthentication
 )
@@ -29,6 +30,7 @@ class PollListView(
     queryset = Question.objects.all()
     # lookup_field = 'something'
     authentication_classes = [
+        TokenAuthentication,
         SessionAuthentication,
         BasicAuthentication
     ]
