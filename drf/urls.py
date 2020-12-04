@@ -16,11 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from employee.views import LoginAPIView, LogoutAPIView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # employee urls
     path('api/', include('employee.api_urls')),
+    # polls urls
     path('api/polls/', include('polls.api_urls')),
-
+    # auth urls
     path('api/app/login/', LoginAPIView.as_view()),
     path('api/app/logout', LogoutAPIView.as_view()),
     path('api/auth/', include('rest_framework.urls')),

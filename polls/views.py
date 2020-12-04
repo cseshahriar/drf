@@ -14,7 +14,16 @@ from rest_framework.authentication import (
     BasicAuthentication
 )
 from rest_framework.permissions import IsAuthenticated
-''' Generic Views '''
+from rest_framework import viewsets
+""" Viewset Views """
+
+
+class PollViewSet(viewsets.ModelViewSet):
+    serializer_class = QuestionSerializers
+    queryset = Question.objects.all()
+
+
+""" Generic Views """
 
 
 class PollListView(
