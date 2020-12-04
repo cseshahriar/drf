@@ -30,4 +30,4 @@ urlpatterns = [
     path('api/app/login/', LoginAPIView.as_view()),
     path('api/app/logout', LogoutAPIView.as_view()),
     path('api/auth/', include('rest_framework.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
