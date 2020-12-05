@@ -25,10 +25,16 @@ from .aysg import urlpatterns as api_doc_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     # employee urls
     path('api/', include('employee.api_urls')),
+
     # polls urls
     path('api/polls/', include('polls.api_urls')),
+
+    # images
+    path('api/images/', include('images.api_urls')),
+
     # auth urls
     path('api/app/login/', LoginAPIView.as_view()),
     path('api/app/logout', LogoutAPIView.as_view()),

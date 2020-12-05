@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     'employee',
     'polls',
+    'images',
 ]
 
 MIDDLEWARE = [
@@ -112,8 +113,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
     ],
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    )
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
